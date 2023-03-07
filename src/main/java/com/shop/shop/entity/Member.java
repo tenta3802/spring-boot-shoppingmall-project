@@ -1,9 +1,11 @@
 package com.shop.shop.entity;
 
 import com.shop.shop.constant.Role;
+import com.shop.shop.dto.JoinFormDto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
@@ -27,8 +29,14 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public static Member createMember() {
+    public static Member createMember(JoinFormDto joinFormDto, PasswordEncoder passwordEncoder) {
         Member member = new Member();
+        member.setName(joinFormDto.getName());
+        member.setEmail(joinFormDto.getEmail());
+        member.setAddress(joinFormDto.getAddress());
+        String password = passwordEncoder.encode(joinFormDto.getPassword());
+        member.setPassword(password);
+        member.setRole(Role.USER);
         return member;
     }
 }
